@@ -41,7 +41,26 @@ public class LibreriaSQLiteEjemplo {
             }
         }
     }
-
+    
+     public static void createNewTable() {
+        // SQLite connection string
+        String url = "jdbc:sqlite:test.db";
+        
+        // SQL statement for creating a new table
+        String sql = "CREATE TABLE IF NOT EXISTS casablanca (\n"
+                + "	año integer PRIMARY KEY,\n"
+                + "	presidente text NOT NULL,\n"
+                + "	capacidad real\n"
+                + ");";
+        
+        try (Connection conn = DriverManager.getConnection(url);
+                Statement stmt = conn.createStatement()) {
+            // create a new table
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     /**
      * @param args the command line arguments
      */
