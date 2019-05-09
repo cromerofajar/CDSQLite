@@ -48,7 +48,7 @@ public class LibreriaSQLiteEjemplo {
         
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS casablanca (\n"
-                + "	año integer PRIMARY KEY,\n"
+                + "	fecha integer PRIMARY KEY,\n"
                 + "	presidente text NOT NULL,\n"
                 + "	capacidad real\n"
                 + ");";
