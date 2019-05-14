@@ -7,8 +7,10 @@ package libreriasqliteejemplo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import static libreriasqliteejemplo.LibreriaSQLiteEjemplo.connect;
 
 /**
  *
@@ -41,8 +43,7 @@ public class LibreriaSQLiteEjemplo {
             }
         }
     }
-    
-     public static void createNewTable() {
+         public static void createNewTable() {
         // SQLite connection string
         String url = "jdbc:sqlite:test.db";
         
@@ -61,12 +62,62 @@ public class LibreriaSQLiteEjemplo {
             System.out.println(e.getMessage());
         }
     }
+
+/**
+ *
+ * @author sqlitetutorial.net
+ */
+public static class InsertApp {
+ 
+    /**
+     * Connect to the test.db database
+     *
+     * @return the Connection object
+     */
+    private Connection connect() {
+        // SQLite connection string
+        String url = "jdbc:sqlite:test.db";
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
+    }
+ 
+    /**
+     * Insert a new row into the warehouses table
+     *
+     * @param name
+     * @param capacity
+     */
+    public void insert(String name, int capacity) {
+        String sql = "INSERT INTO casablanca(fecha,presidente) VALUES(?,?)";
+ 
+        try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, capacity);
+            pstmt.setString(2, name);
+            pstmt.executeUpdate();
+            System.out.println("Insertado");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+ 
     /**
      * @param args the command line arguments
      */
+}
+
     public static void main(String[] args) {
         connect();
         createNewTable();
+        InsertApp ins=new InsertApp();
+        
+        ins.connect();
+        ins.insert("Pepe", 1996);
     }
     
 }
