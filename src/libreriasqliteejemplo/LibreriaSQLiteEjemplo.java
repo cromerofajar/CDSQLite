@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import static libreriasqliteejemplo.LibreriaSQLiteEjemplo.connect;
 
 /**
@@ -149,19 +150,58 @@ public static class SelectApp {
             System.out.println(e.getMessage());
         }
     }
+    public void selectFecha(){
+        String ano=JOptionPane.showInputDialog(null,"Introduce el año para saber que presidente estaba al poder");
+        String sql = "SELECT fecha, presidente FROM casablanca WHERE fecha="+ano;
+        
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+            
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getInt("fecha") +  "\t" + 
+                                   rs.getString("presidente"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void selectPresi(){
+        String presi=JOptionPane.showInputDialog(null,"Introduce el presidente para saber que años estaba al poder");
+        String sql = "SELECT fecha FROM casablanca WHERE presidente=\""+presi+"\"";
+        
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+            
+            // loop through the result set
+            System.out.println(presi+" estubo al poder los años:");
+            while (rs.next()) {
+                
+                System.out.println(rs.getInt("fecha"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
     public static void main(String[] args) {
         connect();
         createNewTable();
-        InsertApp ins=new InsertApp();
         
+        InsertApp ins=new InsertApp();
         ins.connect();
-        ins.insert("Pepe", 1996);
+        String presi=JOptionPane.showInputDialog(null,"Introduzca el nombre del presidente");
+        int fecha=Integer.parseInt(JOptionPane.showInputDialog(null,"Introduzca el año en el que presidio"));
+        ins.insert(presi, fecha);
         
         SelectApp sel=new SelectApp();
         sel.connect();
         sel.selectAll();
+        sel.selectFecha();
+        sel.selectPresi();
     }
     
 }
